@@ -15,12 +15,15 @@ For more information:<br />
 
 ## Dependencies :
 Install `pynacl` with:<br />
+
 `python -m pip install pynacl`
 
 Install `pyblake2` with:<br />
+
 `python -m pip install pyblake2`
 
 Install `pycryptodome` with:<br />
+
 `python -m pip install pycryptodome`
 
 ## PS :
