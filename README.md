@@ -1,4 +1,4 @@
-# RC4toSodiumProxy
+# RC4toSodiumProxy :
 A simple Clash Royale proxy
 
 Proxy work like this:<br />
@@ -13,5 +13,5 @@ Run it with:<br />
 For more information:<br />
 `python Main.py -h`
 
-# PS
+# PS :
 You need a patched rc4 apk, for more information contact me at @GaLaXy1036#1601
