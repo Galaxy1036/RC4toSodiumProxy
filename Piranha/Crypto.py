@@ -27,10 +27,10 @@ class Crypto:
             self.Nonce        = Nonce(clientKey=self.pk, serverKey=self.serverKey)
             self.sharedKey    = Box(self.sk, PublicKey(self.serverKey))
 
-            return bytes(self.pk) + self.afternm(self.sessionKey + bytes(self.encryptNonce) + payload, self.Nonce)
+            return bytes(self.pk) + self.encryptPacket(self.sessionKey + bytes(self.encryptNonce) + payload, self.Nonce)
 
         else:
-            return self.afternm(payload)
+            return self.encryptPacket(payload)
 
     def decrypt(self, packetID, payload):
         if packetID == 20100:
@@ -45,16 +45,16 @@ class Crypto:
 
         elif packetID == 22280 or (packetID == 20103 and self.sessionKey):
             nonce                = Nonce(self.encryptNonce, self.pk, self.serverKey)
-            decrypted            = self.decryptnm(payload, nonce)
+            decrypted            = self.decryptPacket(payload, nonce)
             self.sharedKey       = Box.decode(decrypted[24:56])  # Overwrite the previous sharedKey
             self.decryptNonce    = Nonce(decrypted[:24])
 
             return decrypted[56:]
 
         else:
-            return self.decryptnm(payload)
+            return self.decryptPacket(payload)
 
-    def afternm(self, payload, nonce=None):
+    def encryptPacket(self, payload, nonce=None):
         if not nonce:
             self.encryptNonce.increment()
             nonce = self.encryptNonce
@@ -62,7 +62,7 @@ class Crypto:
         return self.sharedKey.encrypt(payload, bytes(nonce))[24:]
         # 24 because the lib add 24 null bytes at the start of the payload
 
-    def decryptnm(self, payload, nonce=None):
+    def decryptPacket(self, payload, nonce=None):
         if not nonce:
             self.decryptNonce.increment()
             nonce = self.decryptNonce
