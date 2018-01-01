@@ -10,7 +10,7 @@ Proxy work like this:<br />
 Run it with:<br />
 `python Main.py`
 
-For more information:<br />
+For more information type:<br />
 `python Main.py -h`
 
 ## Dependencies :
