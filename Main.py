@@ -2,6 +2,7 @@
 import socket
 import argparse
 import time
+import os
 from threading import Thread
 from hexdump import hexdump
 from Piranha.Crypto import Crypto
@@ -57,9 +58,13 @@ class ClientSide(Thread):
 
                 if self.saveMessage:
                     SavePacket(header + data)
+                if packetID != 10100:
+                    encrypted = self.pepperCrypto.encrypt(packetID, data)
+                    self.server.send(header[:2] + len(encrypted).to_bytes(3, 'big') + header[5:] + encrypted)
 
-                encrypted = self.pepperCrypto.encrypt(packetID, data)
-                self.server.send(header[:2] + len(encrypted).to_bytes(3, 'big') + header[5:] + encrypted)
+                else:
+                    print('[*] Your client isn\'t patched (RC4) !')
+                    os._exit(1)
 
 
 class ServerSide(Thread):
