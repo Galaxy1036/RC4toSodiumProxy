@@ -28,5 +28,5 @@ Install `pycryptodome` with:<br />
 
 ## PS :
 You need a patched rc4 apk, here is one there for CR 2.1:<br />
-https://mega.nz/#!mUtAxTCR!tl8VCAQkftyIqMdxv4Z8p_X-hQ_uK016FtCyRQ6IR8k<br />
+https://mega.nz/#!eMlWFT7Z!hfaSup3cC58ffYQrFhU3fUigQX8kaNqMSnDGzBK_Th<br />
 For more information contact me at @GaLaXy1036#1601
