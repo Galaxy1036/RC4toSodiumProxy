@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 
 
-def SavePacket(data):
+def SavePacket(data,packetName):
 
     with open('Replay/message.index', 'r') as f:
         f = f.read()
         index = int(f)
 
-    packetID = int.from_bytes(data[:2], 'big')
-    fileName = '{}-{}.bin'.format(index, packetID)
+    fileName = '{}-{}.bin'.format(index, packetName)
 
     with open("Replay/" + fileName, 'wb') as f:
         f.write(data)

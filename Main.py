@@ -10,6 +10,7 @@ from RC4.CryptoRC4 import CryptoRc4
 from Packet.ClientHello import ClientHello
 from Packet.MessageFactory import Factory
 from ReplayManager import SavePacket
+from Packet.packetList import *
 
 
 def recvall(sock, size):
@@ -39,13 +40,14 @@ class ClientSide(Thread):
 
     def run(self):
         while True:
-            header   = self.client.recv(7)
-            data     = self.rc4Crypto.decrypt(recvall(self.client, int.from_bytes(header[2:5], 'big')))
-            packetID = int.from_bytes(header[:2], 'big')
+            header     = self.client.recv(7)
+            data       = self.rc4Crypto.decrypt(recvall(self.client, int.from_bytes(header[2:5], 'big')))
+            packetID   = int.from_bytes(header[:2], 'big')
+            packetName = availablePacket.get(packetID, packetID)
 
             if len(header) > 0:
 
-                print('[*] {} received from client (len: {})'.format(packetID, int.from_bytes(header[2:5], 'big')))
+                print('[*] {} received from client (len: {})'.format(packetName, int.from_bytes(header[2:5], 'big')))
 
                 if packetID == 10101:
                     preAuth = self.factory.process(ClientHello())
@@ -57,7 +59,8 @@ class ClientSide(Thread):
                     print(hexdump(header + data))
 
                 if self.saveMessage:
-                    SavePacket(header + data)
+                    SavePacket(header + data, packetName)
+
                 if packetID != 10100:
                     encrypted = self.pepperCrypto.encrypt(packetID, data)
                     self.server.send(header[:2] + len(encrypted).to_bytes(3, 'big') + header[5:] + encrypted)
@@ -80,19 +83,20 @@ class ServerSide(Thread):
 
     def run(self):
         while True:
-            header   = self.server.recv(7)
-            packetID = int.from_bytes(header[:2], 'big')
-            data     = self.pepperCrypto.decrypt(packetID, recvall(self.server, int.from_bytes(header[2:5], 'big')))
+            header     = self.server.recv(7)
+            packetID   = int.from_bytes(header[:2], 'big')
+            data       = self.pepperCrypto.decrypt(packetID, recvall(self.server, int.from_bytes(header[2:5], 'big')))
+            packetName = availablePacket.get(packetID, packetID)
 
             if len(header) > 0:
 
-                print('[*] {} received from server (len: {})'.format(packetID, int.from_bytes(header[2:5], 'big')))
+                print('[*] {} received from server (len: {})'.format(packetName, int.from_bytes(header[2:5], 'big')))
 
                 if self.verbose:
                     print(hexdump(header + data))
 
                 if self.saveMessage:
-                    SavePacket(header + data)
+                    SavePacket(header + data, packetName)
 
                 if packetID != 20100:
                     encrypted = self.rc4Crypto.encrypt(data)
