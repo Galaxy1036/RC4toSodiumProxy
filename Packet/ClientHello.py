@@ -15,6 +15,6 @@ class ClientHello(ByteStream):
         self.writeInt(3)
         self.writeInt(0)
         self.writeInt(830)
-        self.writeString('74ecd0057e94aee0f6b485473ef3a047b4663e39')
+        self.writeString('09214cae532dd8867928b3022c2d2e7e76e4a441')
         self.writeInt(2)
         self.writeInt(2)
