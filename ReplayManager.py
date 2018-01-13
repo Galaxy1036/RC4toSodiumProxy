@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-def SavePacket(data,packetName):
+def SavePacket(data, packetName):
 
     with open('Replay/message.index', 'r') as f:
         f = f.read()
