@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 import nacl.utils
+import json
+import os
 from nacl.public import Box, PrivateKey, PublicKey
 from Piranha.Nonce import Nonce
+from Packet.Reader import Reader
 
 
 class Crypto:
@@ -41,6 +44,30 @@ class Crypto:
             return payload
 
         elif packetID == 20103 and not self.sessionKey:
+            packetReader = Reader(payload)
+
+            if packetReader.ReadVint() == 7:
+                print('[*] Look like masterHash is outdated ! Let the proxy update it')
+                fingerprint = packetReader.ReadString()
+                if fingerprint:
+                    with open('config.json', 'r') as f:
+                        config = json.load(f)
+                        fingerprint = json.loads(fingerprint)
+                        config['MasterHash'] = fingerprint['sha']
+
+                    with open('config.json', 'w') as f:
+                        f.write(json.dumps(config, indent=4))
+                        f.close()
+
+                    print('[*] MasterHash has been updated, re-run the proxy')
+
+                else:
+                    print('[*] Got errorcode 7 without fingerprint')
+
+            else:
+                print('[*] PreAuth packet is outdated, please get the latest one on GaLaXy1036 Github !')
+
+            os._exit(1)
             return payload
 
         elif packetID == 22280 or (packetID == 20103 and self.sessionKey):
