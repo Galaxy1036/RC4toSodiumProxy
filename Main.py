@@ -52,7 +52,7 @@ class ClientSide(Thread):
                 if packetID == 10101:
                     preAuth = self.factory.process(ClientHello())
                     self.server.send(preAuth)
-                    print('[*] PreAuth sended')
+                    print('[*] PreAuth sent')
                     time.sleep(1)
 
                 if self.verbose:
