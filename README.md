@@ -1,3 +1,6 @@
+# Note:
+This proxy is outdated since the latest Clash Royale update (2.2). Supercell removed rc4 encryption from the game so the workaround we found doesn't work anymore.
+
 # RC4toSodiumProxy :
 A simple Clash Royale proxy
 
